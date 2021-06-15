@@ -1,10 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import './App.css';
-
+import TextField from './components/TextField'
 const App = () => {
 
   const [name, setName] = useState('');
-  const [age, setage] = useState(0);
+  const [errname, setErrName] = useState('');
+  const [last, setLast] = useState('');
+  const [errlast, setErrLast] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [errmobile, setErrMobile] = useState('');
+  const [age, setage] = useState('');
+  const [errage, setErrage] = useState('');
   const [names, setnames] = useState([]);
   const [data, setData] = useState(null);
   const [loading, setloading] = useState(true);
@@ -16,24 +22,98 @@ const App = () => {
   }, [names])
 
   const addToArray = () => {
-    setnames([...names, name])
-    setName("")
+    var isValid = [];
+    if (!name) {
+      setErrName("Name Required");
+      isValid.push(false);
+    } else {
+      setErrName("");
+      isValid.push(true);
+    }
+    
+    if (!last) {
+      setErrLast("Last Name Required");
+      isValid.push(false);
+    } else {
+      setErrLast("");
+      isValid.push(true);
+    }
+
+    if (!mobile) {
+      setErrMobile("Mobile Required");
+      isValid.push(false);
+    } else {
+      if(mobile.length===10){ 
+        setErrMobile("");
+        isValid.push(true);
+      }else{
+        setErrMobile("Invalid Mobile No.");
+        isValid.push(false);
+      }
+    }
+
+    if (!age) {
+      setErrage("Age Required");
+      isValid.push(false);
+    } else {
+      setErrage("");
+      isValid.push(true);
+    }
+console.log("isvalid",isValid);
+    if (isValid.includes(false) !== true) {
+      var data = {
+        name: name,
+        last: last,
+        mobile: mobile,
+        age: age
+      }
+      // setnames([...names, name])
+
+    }
+
+
   }
 
   return (
     <div className="App">
-      <input placeholder="Name"
-        value={name}
-        onChange={(event) => {
-          setName(event.target.value);
-          console.log("step2", name)
+      <TextField
+        val={name}
+        placeholder="name"
+        change={(event) => {
+          setName(event.target.value)
         }}
-        style={{
-          height: 40,
-          width: '20%',
-          padding: 5,
-          marginBottom: 10
-        }} />
+        height={30}
+        error={errname}
+      />
+
+      <TextField
+        val={last}
+        placeholder="Last Name"
+        change={(event) => {
+          setLast(event.target.value)
+        }}
+        height={30}
+        error={errlast}
+      />
+
+      <TextField
+        val={mobile}
+        placeholder="Mobile"
+        change={(event) => {
+          setMobile(event.target.value)
+        }}
+        height={30}
+        error={errmobile}
+      />
+      <TextField
+        val={age}
+        placeholder="Age"
+        change={(event) => {
+          setage(event.target.value)
+        }}
+        height={30}
+        error={errage}
+      />
 
       <button
         onClick={addToArray}
@@ -45,7 +125,6 @@ const App = () => {
       >
         Click
       </button>
-
 
       {
         names &&
